@@ -239,7 +239,7 @@ function triggerWin() {
   const finalMessage = document.createElement("p");
   finalMessage.id = "final-message";
   finalMessage.textContent =
-    "Gambar terindah di dunia adalah senyuman Anda saat berhasil menyelesaikan codingan ini! 😊";
+    "Gambar terindah di dunia adalah senyuman Anda saat berhasil menyelesaikan permainan ini! 😊";
   winScreen.appendChild(finalMessage);
   const instructionP = document.createElement("p");
   instructionP.classList.add("win-instruction");
