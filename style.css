@@ -2,7 +2,10 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-color: #f4f4f4;
+  background-image: url('kelimutu-volcanic-3840x2160-19920.jpeg');
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -70,7 +73,69 @@ body {
 #login-page {
   display: none; /* Sembunyikan halaman kuesioner sampai login */
 }
+
 #auth-container {
-  /* Gaya untuk form login/register */
-  padding: 30px;
+  background: #ffffff;
+  padding: 50px 60px !important;
+  border-radius: 18px;
+  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  width: 90%;
+  max-width: 600px;      /* lebih besar */
+  text-align: center;    /* rata tengah */
+}
+
+#auth-container h1 {
+  font-size: 32px;
+  font-weight: 800;
+  margin-bottom: 25px;
+  color: #222;
+}
+
+/* Label */
+#auth-container label {
+  font-size: 18px;
+  font-weight: 600;
+  display: block;
+  margin-bottom: 8px;
+  text-align: left;
+}
+
+/* Input */
+#auth-container input[type="text"] {
+  width: 100%;
+  padding: 14px 16px;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  font-size: 16px;
+  transition: 0.25s;
+}
+
+#auth-container input[type="text"]:focus {
+  border-color: #4c8bf5;
+  box-shadow: 0 0 6px rgba(76,139,245,0.4);
+  outline: none;
+}
+
+/* Tombol Login */
+#auth-container button {
+  margin-top: 15px;
+  padding: 12px 25px;
+  font-size: 17px;
+  font-weight: bold;
+  background: #4c8bf5;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+#auth-container button:hover {
+  background: #3b73d1;
+}
+
+#auth-container p {
+  margin-top: 20px;
+  font-size: 14px;
+  color: #555;
 }
