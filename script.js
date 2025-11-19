@@ -1,28 +1,65 @@
 let userName = "";
-let attempts = { q1: 0, q2: 0 };
-let solved = { q1: false, q2: false };
+// Kita kembalikan attempts untuk melacak klik salah
+let attempts = { q1: 0, q2: 0, q3: 0 };
+let validatedQ1 = false; // false, 'pending', or true
+let validatedQ2 = false; // false, 'pending', or true
+let validatedQ3 = false; // false or true
+let clickedFinalScreen = false;
 
-// Data Pertanyaan diubah untuk memisahkan label dan konten
 const questions = [
   {
     id: "q1",
+    title: "Pertanyaan 1: Siapakah presiden pertama Indonesia?",
+    hideOptions: false,
     options: [
-      { label: "A", value: "Soekarno", isCorrect: true },
-      { label: "B", value: "Jokowi", isCorrect: false },
-      { label: "C", value: "Soeharto", isCorrect: false },
+      { value: "Soekarno", isCorrect: true },
+      { value: "Jokowi", isCorrect: false },
+      { value: "Soeharto", isCorrect: false },
+      { value: "BJ Habibie", isCorrect: false },
+      { value: "Megawati", isCorrect: false },
     ],
   },
   {
     id: "q2",
+    title: "Pertanyaan 2: Di manakah letak candi Borobudur?",
+    hideOptions: false,
     options: [
-      { label: "A", value: "Jawa Tengah", isCorrect: true },
-      { label: "B", value: "Bali", isCorrect: false },
-      { label: "C", value: "Papua", isCorrect: false },
+      { value: "Jawa Tengah", isCorrect: true },
+      { value: "Bali", isCorrect: false },
+      { value: "Papua", isCorrect: false },
+      { value: "Yogyakarta", isCorrect: false },
+      { value: "Jakarta", isCorrect: false },
+    ],
+  },
+  {
+    id: "q3",
+    title: "Pertanyaan 3 (Lucu): Hewan apa yang paling sering cari bapaknya?",
+    hideOptions: true, // Q3: Opsi disembunyikan awalnya
+    options: [
+      {
+        value: "Kambing (karena bunyinya Beee... beee... cari bapak/babeh)",
+        isCorrect: true,
+      },
+      { value: "Kucing", isCorrect: false },
+      { value: "Ayam", isCorrect: false },
+      { value: "Kancil", isCorrect: false },
+      { value: "Tikus", isCorrect: false },
     ],
   },
 ];
 
-// --- FUNGSI LOGIN (Sama) ---
+// FUNGSI BANTUAN BARU: Mengubah tema background di container
+function changeTheme(themeClass, targetContainerId) {
+  const targetContainer = document.getElementById(targetContainerId);
+  if (targetContainer) {
+    targetContainer.classList.remove("theme-q1", "theme-q2", "theme-q3");
+    if (themeClass) {
+      targetContainer.classList.add(themeClass);
+    }
+  }
+}
+
+// --- FUNGSI LOGIN ---
 function login() {
   userName = document.getElementById("username").value;
   if (userName.trim() === "") {
@@ -33,13 +70,16 @@ function login() {
   document.getElementById("login-page").style.display = "block";
   document.getElementById("welcome-message").innerText = `Halo, ${userName}!`;
   initializeQuestions();
+  changeTheme("theme-q1", "login-page");
 }
 
 // --- FUNGSI UTAMA GAME ---
-
 function initializeQuestions() {
-  // Saat inisialisasi, kita acak dulu untuk klik pertama
-  questions.forEach((q) => renderQuestionOptions(q.id, true));
+  renderQuestionOptions("q1");
+  renderQuestionOptions("q2");
+  document
+    .querySelector("#q2-options")
+    .closest(".question-card").style.display = "none";
 }
 
 function shuffleArray(array) {
@@ -50,126 +90,169 @@ function shuffleArray(array) {
   return array;
 }
 
-// forceShuffle digunakan untuk inisialisasi dan klik pertama/kedua
-function renderQuestionOptions(questionId, forceShuffle = false) {
+function renderQuestionOptions(questionId) {
   const optionsContainer = document.getElementById(`${questionId}-options`);
   const questionData = questions.find((q) => q.id === questionId);
 
-  if (!forceShuffle) return;
-
-  // Acak opsi berdasarkan data value, bukan label A/B/C
   let shuffledOptions = shuffleArray([...questionData.options]);
-
   optionsContainer.innerHTML = "";
+  const labels = ["A", "B", "C", "D", "E"];
 
-  // Tetapkan label A, B, C secara statis ke opsi yang sudah diacak
   shuffledOptions.forEach((optionData, index) => {
     const button = document.createElement("button");
-    // Teks tombol HANYA A, B, atau C
-    button.textContent = ["A", "B", "C"][index];
 
-    // Simpan data asli di atribut data HTML
-    button.setAttribute("data-value", optionData.value);
+    if (questionData.hideOptions) {
+      button.textContent = labels[index];
+    } else {
+      button.textContent = `${labels[index]}. ${optionData.value}`;
+    }
+
     button.setAttribute("data-correct", optionData.isCorrect);
-
+    button.setAttribute("data-value", optionData.value);
     button.onclick = () => handleAnswer(questionId, button);
     optionsContainer.appendChild(button);
   });
 }
 
 function handleAnswer(questionId, clickedButton) {
-  if (solved[questionId]) return;
+  const status =
+    questionId === "q1"
+      ? validatedQ1
+      : questionId === "q2"
+      ? validatedQ2
+      : validatedQ3;
 
-  attempts[questionId]++;
+  if (status === true) return;
 
   const isCorrect = clickedButton.getAttribute("data-correct") === "true";
-  const answerValue = clickedButton.getAttribute("data-value");
 
   if (isCorrect) {
-    // Jawaban benar pada klik manapun (beruntung)
-    alert(`Benar! Isinya adalah: ${answerValue}`);
-    markAsSolved(questionId);
-  } else {
-    // Jawaban salah
-    if (attempts[questionId] < 3) {
-      alert(
-        `Salah! Isinya: ${answerValue}. Masih ada ${
-          3 - attempts[questionId]
-        } kesempatan acak lagi.`
-      );
-      // Acak ulang untuk kesempatan berikutnya
-      renderQuestionOptions(questionId, true);
-    } else {
-      alert(
-        `Salah! Isinya: ${answerValue}. Opsi tidak akan diacak lagi. Cari jawaban yang benar.`
-      );
-      // Nonaktifkan tombol yang salah
-      clickedButton.disabled = true;
-      // Jika sudah 3 kali salah, biarkan user memilih dari opsi yang tersisa
+    if (questionId === "q1" || questionId === "q2") {
+      if (status === false) {
+        alert("eits, yakin? coba lagi");
+        if (questionId === "q1") validatedQ1 = "pending";
+        if (questionId === "q2") validatedQ2 = "pending";
+        renderQuestionOptions(questionId);
+      } else if (status === "pending") {
+        alert("yaudah kalo kamu maksa");
+        if (questionId === "q1") validatedQ1 = true;
+        if (questionId === "q2") validatedQ2 = true;
+        checkGameStatus(questionId);
+      }
+    } else if (questionId === "q3") {
+      displayQ3Answers();
+      document
+        .querySelectorAll("#q3-options button")
+        .forEach((btn) => (btn.disabled = true));
+      alert(`yahh ketebak deh, SELAMAT YA!`);
+      validatedQ3 = true;
+      checkGameStatus(questionId);
     }
+  } else {
+    // Logika untuk menampilkan pesan "eits yakin? coba lagi"
+    attempts[questionId]++;
+
+    if (questionId === "q1" || questionId === "q2") {
+      if (attempts[questionId] < 3) {
+        alert(`jangan betjanda deh, ayo serius`);
+      } else {
+        // Setelah 2 kali salah (klik ke-3 dan seterusnya)
+        alert(`jangan betjanda deh, ayo serius`);
+      }
+    } else {
+      // Untuk Q3, pesan standar
+      alert(`jangan betjanda deh, ayo serius`);
+    }
+
+    renderQuestionOptions(questionId);
   }
 }
 
-function markAsSolved(questionId) {
-  solved[questionId] = true;
-  const optionsContainer = document.getElementById(`${questionId}-options`);
+function checkGameStatus(currentQuestionId) {
+  if (currentQuestionId === "q1" && validatedQ1 === true) {
+    document
+      .querySelectorAll("#q1-options button")
+      .forEach((btn) => (btn.disabled = true));
+    document
+      .querySelector("#q1-options")
+      .closest(".question-card").style.display = "none";
+    document
+      .querySelector("#q2-options")
+      .closest(".question-card").style.display = "block";
+    changeTheme("theme-q2", "login-page");
+  } else if (currentQuestionId === "q2" && validatedQ2 === true) {
+    document
+      .querySelectorAll("#q2-options button")
+      .forEach((btn) => (btn.disabled = true));
+    showQuestion3();
+  } else if (
+    validatedQ1 === true &&
+    validatedQ2 === true &&
+    validatedQ3 === true
+  ) {
+    setTimeout(triggerWin, 3000);
+  }
+}
+
+function showQuestion3() {
+  const q3Data = questions.find((q) => q.id === "q3");
+  const loginPage = document.getElementById("login-page");
+
+  loginPage.innerHTML = `
+        <h1 id="welcome-message">Halo, ${userName}!</h1>
+        <p>Pilih jawaban yang benar. Untuk pertanyaan ini, isinya disembunyikan!</p>
+        <div class="question-card">
+            <h2>${q3Data.title}</h2>
+            <div class="options" id="q3-options"></div>
+        </div>
+    `;
+
+  renderQuestionOptions("q3");
+  changeTheme("theme-q3", "login-page");
+}
+
+function displayQ3Answers() {
+  const optionsContainer = document.getElementById(`q3-options`);
+  if (!optionsContainer) return;
+
   Array.from(optionsContainer.children).forEach((button) => {
-    button.disabled = true;
+    const value = button.getAttribute("data-value");
+    button.textContent = `${button.textContent}. ${value}`;
+
     if (button.getAttribute("data-correct") === "true") {
       button.style.backgroundColor = "lightgreen";
-      // Update teks tombol yang benar agar menampilkan isi jawabannya
-      button.textContent = `${button.textContent}. ${button.getAttribute(
-        "data-value"
-      )}`;
     }
   });
-
-  if (solved.q1 && solved.q2) {
-    triggerWin();
-  }
 }
 
-let clickedFinalScreen = false;
-
-// --- FUNGSI KEMENANGAN (Diperbarui) ---
+// --- FUNGSI KEMENANGAN ---
 function triggerWin() {
   const winScreen = document.getElementById("win-screen");
-  const winText = document.getElementById("win-text");
 
-  // Set teks kemenangan awal
-  winText.textContent = `Selamat ${userName}! Anda berhak melihat gambar terindah di dunia.`;
-
-  // Tampilkan layar kemenangan
+  document.getElementById("login-page").style.display = "none";
   winScreen.style.display = "flex";
 
-  // Siapkan elemen untuk pesan akhir
+  changeTheme(null, "login-page");
+
+  const winText = document.getElementById("win-text");
+  winText.textContent = `Selamat ${userName}! Anda berhak melihat gambar terindah di dunia.`;
   const finalMessage = document.createElement("p");
   finalMessage.id = "final-message";
-  // Gunakan pesan dari konsol sebelumnya
   finalMessage.textContent =
     "Gambar terindah di dunia adalah senyuman Anda saat berhasil menyelesaikan codingan ini! 😊";
   winScreen.appendChild(finalMessage);
-
   const instructionP = document.createElement("p");
   instructionP.classList.add("win-instruction");
   instructionP.textContent =
     "Klik di mana saja pada layar ini untuk melihat 'gambar'nya.";
   winScreen.appendChild(instructionP);
 
-  // Tambahkan event listener untuk klik di mana saja pada layar kemenangan
   winScreen.addEventListener("click", function () {
-    if (clickedFinalScreen) return; // Hentikan jika sudah diklik
-
+    if (clickedFinalScreen) return;
     clickedFinalScreen = true;
-
-    // 1. Jadikan layar semakin hitam (dari #000 ke #000, jadi efek visualnya minimal tapi logikanya terpenuhi)
-    winScreen.style.backgroundColor = "#000000"; // Sudah hitam pekat
-
-    // 2. Munculkan tulisan yang sebelumnya ada di konsol
+    winScreen.style.backgroundColor = "#000000";
     finalMessage.style.display = "block";
-
-    // Update instruksi
     instructionP.textContent = "Terima kasih sudah bermain!";
-    winScreen.style.cursor = "default"; // Hapus kursor pointer
+    winScreen.style.cursor = "default";
   });
 }

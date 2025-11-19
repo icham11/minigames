@@ -14,13 +14,53 @@ body {
   transition: background-color 0.5s ease; /* Transisi untuk layar hitam */
 }
 .container {
-  background-color: white;
+  /* background-color: rgb(85, 119, 179); <--- Hapus ini */
+  /* Tambahkan background color putih dengan opacity 0.8 pada konten itu sendiri */
+  background-color: rgba(255, 255, 255, 0.9);
   padding: 20px 40px;
   border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 8px rgba(233, 222, 222, 0.1);
   width: 80%;
   max-width: 500px;
+  position: relative; /* Penting untuk posisi absolut pseudo-element */
+  overflow: hidden; /* Pastikan gambar background tidak keluar dari border-radius */
+  z-index: 1; /* Pastikan konten di atas background */
 }
+
+/* Gaya untuk latar belakang gambar dengan opasitas rendah */
+.container::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  /* Opacity gambar latar belakang */
+  opacity: 0.5;
+  z-index: -1; /* Pastikan di belakang konten */
+  transition: background-image 0.5s ease; /* Transisi saat gambar berubah */
+}
+
+/* --- TEMA BACKGROUND PERTANYAAN (di dalam container) --- */
+
+.container.theme-q1::before {
+  /* Ganti URL ini dengan gambar tema Presiden Anda */
+  background-image: url("/presiden.jpg");
+}
+
+.container.theme-q2::before {
+  /* Ganti URL ini dengan gambar tema Borobudur Anda */
+  background-image: url("/borobudur.jpg");
+}
+
+.container.theme-q3::before {
+  /* Ganti URL ini dengan gambar tema Hewan/Kambing Anda */
+  background-image: url("/kambing.jpg");
+}
+
 .question-card {
   margin-bottom: 20px;
 }

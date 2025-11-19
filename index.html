@@ -18,26 +18,28 @@
 
     <div id="login-page" class="container">
       <h1 id="welcome-message">Halo, [Nama]!</h1>
-      <p>Pilih A, B, atau C. Semoga beruntung!</p>
+      <p>Pilih jawaban yang benar. Posisi jawaban diacak!</p>
 
       <div class="question-card">
         <h2>Pertanyaan 1: Siapakah presiden pertama Indonesia?</h2>
         <div class="options" id="q1-options">
-          <!-- Tombol jawaban A, B, C dibuat via JavaScript -->
+          <!-- Tombol jawaban dibuat via JavaScript -->
         </div>
       </div>
 
       <div class="question-card">
         <h2>Pertanyaan 2: Di manakah letak candi Borobudur?</h2>
         <div class="options" id="q2-options">
-          <!-- Tombol jawaban A, B, C dibuat via JavaScript -->
+          <!-- Tombol jawaban dibuat via JavaScript -->
         </div>
       </div>
     </div>
 
     <div class="win-screen" id="win-screen">
       <h1 id="win-text"></h1>
-      <p></p>
+      <!-- P tag di bawah akan diisi oleh JS dan CSS -->
+      <p id="final-message"></p>
+      <p class="win-instruction"></p>
     </div>
 
     <script src="script.js"></script>
