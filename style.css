@@ -2,7 +2,7 @@
 
 body {
   font-family: Arial, sans-serif;
-  background-image: url('kelimutu-volcanic-3840x2160-19920.jpeg');
+  background-image: url("kelimutu-volcanic-3840x2160-19920.jpeg");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
@@ -51,24 +51,51 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: black;
+  /* Gunakan hitam pekat awal */
+  background-color: #000000;
   color: white;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
   text-align: center;
   flex-direction: column;
   z-index: 1000;
+  cursor: pointer; /* Menunjukkan area bisa diklik */
+  padding: 20px;
+  box-sizing: border-box;
+  transition: background-color 1s ease; /* Tambah transisi untuk efek "semakin hitam" */
 }
 .win-screen h1 {
-  /* Ukuran font dikecilkan dari 2em menjadi 1.2em */
   font-size: 1.2em;
-  margin: 10px; /* Tambah margin agar tidak terlalu mepet */
+  margin: 0 0 10px 0;
 }
-.win-screen p {
-  font-size: 0.9em;
-  margin: 5px;
+.win-instruction {
+  display: block;
+  margin-top: 20px;
+  font-size: 0.8em;
+  color: #aaa;
 }
 
+/* Gaya untuk pesan "gambar terindah" yang muncul setelah diklik */
+#final-message {
+  display: none; /* Sembunyikan awal */
+  margin-top: 30px;
+  font-size: 1.5em; /* Ukuran besar seperti di konsol */
+  font-weight: bold;
+  color: red; /* Warna merah seperti di konsol */
+  /* Animasi sederhana agar terlihat menarik saat muncul */
+  animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
 /* Gaya untuk halaman login (Awalnya tersembunyi) */
 #login-page {
   display: none; /* Sembunyikan halaman kuesioner sampai login */
@@ -78,10 +105,10 @@ body {
   background: #ffffff;
   padding: 50px 60px !important;
   border-radius: 18px;
-  box-shadow: 0 6px 18px rgba(0,0,0,0.15);
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
   width: 90%;
-  max-width: 600px;      /* lebih besar */
-  text-align: center;    /* rata tengah */
+  max-width: 600px; /* lebih besar */
+  text-align: center; /* rata tengah */
 }
 
 #auth-container h1 {
@@ -112,7 +139,7 @@ body {
 
 #auth-container input[type="text"]:focus {
   border-color: #4c8bf5;
-  box-shadow: 0 0 6px rgba(76,139,245,0.4);
+  box-shadow: 0 0 6px rgba(76, 139, 245, 0.4);
   outline: none;
 }
 

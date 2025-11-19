@@ -129,21 +129,47 @@ function markAsSolved(questionId) {
   }
 }
 
-// --- FUNGSI KEMENANGAN (Sama) ---
+let clickedFinalScreen = false;
+
+// --- FUNGSI KEMENANGAN (Diperbarui) ---
 function triggerWin() {
-  // ... (kode fungsi triggerWin sama seperti sebelumnya) ...
   const winScreen = document.getElementById("win-screen");
   const winText = document.getElementById("win-text");
 
+  // Set teks kemenangan awal
   winText.textContent = `Selamat ${userName}! Anda berhak melihat gambar terindah di dunia.`;
-  winScreen.style.display = "flex";
-  document.body.style.backgroundColor = "black";
 
-  console.log(
-    "%cIni gambar terindahnya!",
-    "font-size: 50px; color: red; font-weight: bold;"
-  );
-  console.log(
-    "Gambar terindah di dunia adalah senyuman Anda saat berhasil menyelesaikan game ini! 😊"
-  );
+  // Tampilkan layar kemenangan
+  winScreen.style.display = "flex";
+
+  // Siapkan elemen untuk pesan akhir
+  const finalMessage = document.createElement("p");
+  finalMessage.id = "final-message";
+  // Gunakan pesan dari konsol sebelumnya
+  finalMessage.textContent =
+    "Gambar terindah di dunia adalah senyuman Anda saat berhasil menyelesaikan codingan ini! 😊";
+  winScreen.appendChild(finalMessage);
+
+  const instructionP = document.createElement("p");
+  instructionP.classList.add("win-instruction");
+  instructionP.textContent =
+    "Klik di mana saja pada layar ini untuk melihat 'gambar'nya.";
+  winScreen.appendChild(instructionP);
+
+  // Tambahkan event listener untuk klik di mana saja pada layar kemenangan
+  winScreen.addEventListener("click", function () {
+    if (clickedFinalScreen) return; // Hentikan jika sudah diklik
+
+    clickedFinalScreen = true;
+
+    // 1. Jadikan layar semakin hitam (dari #000 ke #000, jadi efek visualnya minimal tapi logikanya terpenuhi)
+    winScreen.style.backgroundColor = "#000000"; // Sudah hitam pekat
+
+    // 2. Munculkan tulisan yang sebelumnya ada di konsol
+    finalMessage.style.display = "block";
+
+    // Update instruksi
+    instructionP.textContent = "Terima kasih sudah bermain!";
+    winScreen.style.cursor = "default"; // Hapus kursor pointer
+  });
 }
