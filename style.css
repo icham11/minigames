@@ -48,17 +48,17 @@ body {
 
 .container.theme-q1::before {
   /* Ganti URL ini dengan gambar tema Presiden Anda */
-  background-image: url("/presiden.jpg");
+  background-image: url("presiden.jpg");
 }
 
 .container.theme-q2::before {
   /* Ganti URL ini dengan gambar tema Borobudur Anda */
-  background-image: url("/borobudur.jpg");
+  background-image: url("borobudur.jpg");
 }
 
 .container.theme-q3::before {
   /* Ganti URL ini dengan gambar tema Hewan/Kambing Anda */
-  background-image: url("/kambing.jpg");
+  background-image: url("kambing.jpg");
 }
 
 .question-card {
