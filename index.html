@@ -13,9 +13,11 @@
       <label for="username">Nama Pengguna:</label>
       <input type="text" id="username" placeholder="Masukkan nama Anda" />
       <button onclick="login()">Masuk</button>
-      <p>Anda harus login untuk bermain.</p>
+      <audio id="backsound" loop>
+      <source src="happy.mp3" type="audio/mpeg">
+      </audio>
+      <p>Anda harus login untuk bermain</p>
     </div>
-
     <div id="login-page" class="container">
       <h1 id="welcome-message">Halo, [Nama]!</h1>
       <p>Pilih jawaban yang benar. Posisi jawaban diacak!</p>
@@ -43,5 +45,6 @@
     </div>
 
     <script src="script.js"></script>
+    </audio>
   </body>
 </html>

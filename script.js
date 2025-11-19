@@ -48,6 +48,10 @@ const questions = [
   },
 ];
 
+// FUNGSI BACKSOUND
+let backsound = document.getElementById ('happy');
+backsound.play();
+
 // FUNGSI BANTUAN BARU: Mengubah tema background di container
 function changeTheme(themeClass, targetContainerId) {
   const targetContainer = document.getElementById(targetContainerId);
@@ -57,6 +61,13 @@ function changeTheme(themeClass, targetContainerId) {
       targetContainer.classList.add(themeClass);
     }
   }
+}
+
+// --- Audio ---
+function playAudio() {
+  let backsound = document.getElementById('backsound')
+  backsound.play()
+  login()
 }
 
 // --- FUNGSI LOGIN ---
@@ -71,7 +82,12 @@ function login() {
   document.getElementById("welcome-message").innerText = `Halo, ${userName}!`;
   initializeQuestions();
   changeTheme("theme-q1", "login-page");
+
+  let backsound = document.getElementById('backsound')
+  backsound.play()
+  login()
 }
+
 
 // --- FUNGSI UTAMA GAME ---
 function initializeQuestions() {
