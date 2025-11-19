@@ -1,0 +1,76 @@
+/* style.css */
+
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  margin: 0;
+  transition: background-color 0.5s ease; /* Transisi untuk layar hitam */
+}
+.container {
+  background-color: white;
+  padding: 20px 40px;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  width: 80%;
+  max-width: 500px;
+}
+.question-card {
+  margin-bottom: 20px;
+}
+.question-card h2 {
+  color: #333;
+}
+.options button {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin-bottom: 10px;
+  border: 1px solid #ccc;
+  background-color: #e9e9e9;
+  border-radius: 5px;
+  cursor: pointer;
+  font-size: 16px;
+  transition: background-color 0.3s;
+}
+.options button:hover {
+  background-color: #ddd;
+}
+
+/* Gaya untuk layar kemenangan (Awalnya tersembunyi) */
+.win-screen {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: black;
+  color: white;
+  justify-content: space-between;
+  align-items: center;
+  text-align: center;
+  flex-direction: column;
+  z-index: 1000;
+}
+.win-screen h1 {
+  /* Ukuran font dikecilkan dari 2em menjadi 1.2em */
+  font-size: 1.2em;
+  margin: 10px; /* Tambah margin agar tidak terlalu mepet */
+}
+.win-screen p {
+  font-size: 0.9em;
+  margin: 5px;
+}
+
+/* Gaya untuk halaman login (Awalnya tersembunyi) */
+#login-page {
+  display: none; /* Sembunyikan halaman kuesioner sampai login */
+}
+#auth-container {
+  /* Gaya untuk form login/register */
+  padding: 30px;
+}

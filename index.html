@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Game Kuisioner</title>
+
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div id="auth-container" class="container">
+      <h1>Registrasi & Login</h1>
+      <label for="username">Nama Pengguna:</label>
+      <input type="text" id="username" placeholder="Masukkan nama Anda" />
+      <button onclick="login()">Masuk</button>
+      <p>Anda harus login untuk bermain.</p>
+    </div>
+
+    <div id="login-page" class="container">
+      <h1 id="welcome-message">Halo, [Nama]!</h1>
+      <p>Pilih A, B, atau C. Semoga beruntung!</p>
+
+      <div class="question-card">
+        <h2>Pertanyaan 1: Siapakah presiden pertama Indonesia?</h2>
+        <div class="options" id="q1-options">
+          <!-- Tombol jawaban A, B, C dibuat via JavaScript -->
+        </div>
+      </div>
+
+      <div class="question-card">
+        <h2>Pertanyaan 2: Di manakah letak candi Borobudur?</h2>
+        <div class="options" id="q2-options">
+          <!-- Tombol jawaban A, B, C dibuat via JavaScript -->
+        </div>
+      </div>
+    </div>
+
+    <div class="win-screen" id="win-screen">
+      <h1 id="win-text"></h1>
+      <p>Gambar terindah di dunia ada di konsol browser (F12) 😊</p>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
