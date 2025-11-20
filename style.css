@@ -1,33 +1,48 @@
-/* style.css */
+/* style.css - Simpel, Tipis, Nakal */
 
+/* Definisi variabel CSS untuk palet warna yang konsisten */
+:root {
+  --color-accent: #d6ab9b; /* Warna aksen/nakal (oranye-merah) */
+  --color-background: #0a0a0a; /* Background sangat gelap */
+  --color-card-bg: #1e1e1e; /* Background kartu (abu tua) */
+  --color-text: #e0e0e0; /* Teks abu muda */
+  --color-border: #444; /* Warna border tipis */
+  --color-win-bg: #000000; /* Background layar menang */
+}
+
+/* Gaya dasar untuk seluruh halaman */
 body {
-  font-family: Arial, sans-serif;
+  font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+  /* Gambar background utama (sesuaikan path file Anda) */
   background-image: url("kelimutu-volcanic-3840x2160-19920.jpeg");
   background-size: cover;
   background-position: center;
-  background-repeat: no-repeat;
+  background-color: var(--color-background);
   display: flex;
   justify-content: center;
   align-items: center;
   min-height: 100vh;
   margin: 0;
-  transition: background-color 0.5s ease; /* Transisi untuk layar hitam */
-}
-.container {
-  /* background-color: rgb(85, 119, 179); <--- Hapus ini */
-  /* Tambahkan background color putih dengan opacity 0.8 pada konten itu sendiri */
-  background-color: rgba(255, 255, 255, 0.9);
-  padding: 20px 40px;
-  border-radius: 10px;
-  box-shadow: 0 4px 8px rgba(233, 222, 222, 0.1);
-  width: 80%;
-  max-width: 500px;
-  position: relative; /* Penting untuk posisi absolut pseudo-element */
-  overflow: hidden; /* Pastikan gambar background tidak keluar dari border-radius */
-  z-index: 1; /* Pastikan konten di atas background */
+  color: var(--color-text);
+  /* Transisi untuk layar hitam saat menang */
+  transition: background-color 0.5s ease;
 }
 
-/* Gaya untuk latar belakang gambar dengan opasitas rendah */
+/* Gaya umum untuk kontainer utama (login dan kuesioner) */
+.container {
+  background-color: var(--color-card-bg);
+  padding: 30px;
+  border-radius: 3px; /* Sudut tajam/minimalis */
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5); /* Bayangan simpel */
+  width: 80%;
+  max-width: 500px;
+  position: relative;
+  overflow: hidden;
+  z-index: 1;
+  border: 1px solid var(--color-border); /* Border tipis */
+}
+
+/* Pseudo-element untuk gambar background di dalam kontainer */
 .container::before {
   content: "";
   position: absolute;
@@ -38,52 +53,146 @@ body {
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  /* Opacity gambar latar belakang */
-  opacity: 0.5;
-  z-index: -1; /* Pastikan di belakang konten */
-  transition: background-image 0.5s ease; /* Transisi saat gambar berubah */
+  opacity: 0.05; /* Opacity sangat rendah */
+  z-index: -1;
+  transition: background-image 0.5s ease;
 }
 
-/* --- TEMA BACKGROUND PERTANYAAN (di dalam container) --- */
-
+/* Tema spesifik per pertanyaan (sesuaikan path gambar Anda) */
 .container.theme-q1::before {
-  /* Ganti URL ini dengan gambar tema Presiden Anda */
   background-image: url("presiden.jpg");
 }
 
 .container.theme-q2::before {
-  /* Ganti URL ini dengan gambar tema Borobudur Anda */
   background-image: url("borobudur.jpg");
 }
 
 .container.theme-q3::before {
-  /* Ganti URL ini dengan gambar tema Hewan/Kambing Anda */
   background-image: url("kambing.jpg");
+}
+
+/* --- Area Login/Auth --- */
+#auth-container {
+  background: var(--color-card-bg);
+  padding: 40px !important;
+  border-radius: 3px;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+  text-align: center;
+  border: 1px solid var(--color-border);
+}
+
+#auth-container h1 {
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 20px;
+  color: var(--color-accent);
+  text-transform: uppercase;
+  border-bottom: 1px solid var(--color-border);
+  padding-bottom: 10px;
+}
+
+#auth-container label {
+  color: var(--color-text);
+  display: block;
+  text-align: left;
+  margin-bottom: 5px;
+}
+
+#auth-container input[type="text"] {
+  width: 100%;
+  box-sizing: border-box; /* Pastikan padding tidak menambah lebar */
+  background: var(--color-background);
+  border: 1px solid var(--color-border);
+  color: var(--color-text);
+  border-radius: 0;
+  padding: 10px;
+  margin-bottom: 15px;
+}
+
+#auth-container input[type="text"]:focus {
+  border-color: var(--color-accent);
+  outline: none;
+  box-shadow: none;
+}
+
+#auth-container button {
+  width: 100%;
+  background: var(--color-accent);
+  color: var(--color-background);
+  border: none;
+  font-weight: bold;
+  border-radius: 0;
+  padding: 10px;
+  margin-top: 15px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+#auth-container button:hover {
+  background: #ff6347;
+}
+
+#auth-container p {
+  font-size: 0.8em;
+  margin-top: 15px;
+}
+
+/* --- Area Kuesioner --- */
+#login-page {
+  display: none;
+}
+
+h2 {
+  color: var(--color-accent);
+  font-size: 1.2em;
+  margin-bottom: 15px;
+  min-height: 1.2em; /* Menghindari lompatan layout saat typing effect */
+}
+
+p {
+  font-size: 0.9em;
+  color: var(--color-border);
 }
 
 .question-card {
   margin-bottom: 20px;
 }
-.question-card h2 {
-  color: #333;
-}
+
+/* Opsi Jawaban (Simpel dan Tipis) */
 .options button {
   display: block;
   width: 100%;
   padding: 10px;
   margin-bottom: 10px;
-  border: 1px solid #ccc;
-  background-color: #e9e9e9;
-  border-radius: 5px;
+  border: 1px solid var(--color-border);
+  background-color: var(--color-background);
+  color: var(--color-text);
+  border-radius: 0px;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s;
-}
-.options button:hover {
-  background-color: #ddd;
+  font-size: 1em;
+  transition: all 0.2s;
+  text-align: left;
 }
 
-/* Gaya untuk layar kemenangan (Awalnya tersembunyi) */
+.options button:hover {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+}
+
+.options button:disabled {
+  cursor: not-allowed;
+  opacity: 0.5;
+  background-color: var(--color-background);
+}
+
+.options button.correct-answer {
+  background-color: var(--color-accent);
+  color: var(--color-background);
+  font-weight: bold;
+  border-color: var(--color-accent);
+}
+
+/* --- Layar Kemenangan (Sangat Minimalis) --- */
 .win-screen {
   display: none;
   position: fixed;
@@ -91,118 +200,49 @@ body {
   left: 0;
   width: 100%;
   height: 100%;
-  /* Gunakan hitam pekat awal */
-  background-color: #000000;
+  background-color: var(--color-win-bg);
   color: white;
   justify-content: center;
   align-items: center;
   text-align: center;
   flex-direction: column;
   z-index: 1000;
-  cursor: pointer; /* Menunjukkan area bisa diklik */
+  cursor: pointer;
   padding: 20px;
-  box-sizing: border-box;
-  transition: background-color 1s ease; /* Tambah transisi untuk efek "semakin hitam" */
+  transition: background-color 1s ease;
 }
+
 .win-screen h1 {
-  font-size: 1.2em;
+  font-size: 1.5em;
+  color: var(--color-text);
   margin: 0 0 10px 0;
 }
-.win-instruction {
-  display: block;
-  margin-top: 20px;
-  font-size: 0.8em;
-  color: #aaa;
-}
 
-/* Gaya untuk pesan "gambar terindah" yang muncul setelah diklik */
 #final-message {
-  display: none; /* Sembunyikan awal */
-  margin-top: 30px;
-  font-size: 1.5em; /* Ukuran besar seperti di konsol */
-  font-weight: bold;
-  color: red; /* Warna merah seperti di konsol */
-  /* Animasi sederhana agar terlihat menarik saat muncul */
-  animation: fadeIn 1s forwards;
-}
-
-@keyframes fadeIn {
-  from {
-    opacity: 0;
-    transform: scale(0.8);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
-}
-/* Gaya untuk halaman login (Awalnya tersembunyi) */
-#login-page {
-  display: none; /* Sembunyikan halaman kuesioner sampai login */
-}
-
-#auth-container {
-  background: #ffffff;
-  padding: 50px 60px !important;
-  border-radius: 18px;
-  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.15);
-  width: 90%;
-  max-width: 600px; /* lebih besar */
-  text-align: center; /* rata tengah */
-}
-
-#auth-container h1 {
-  font-size: 32px;
-  font-weight: 800;
-  margin-bottom: 25px;
-  color: #222;
-}
-
-/* Label */
-#auth-container label {
-  font-size: 18px;
-  font-weight: 600;
-  display: block;
-  margin-bottom: 8px;
-  text-align: left;
-}
-
-/* Input */
-#auth-container input[type="text"] {
-  width: 100%;
-  padding: 14px 16px;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  font-size: 16px;
-  transition: 0.25s;
-}
-
-#auth-container input[type="text"]:focus {
-  border-color: #4c8bf5;
-  box-shadow: 0 0 6px rgba(76, 139, 245, 0.4);
-  outline: none;
-}
-
-/* Tombol Login */
-#auth-container button {
-  margin-top: 15px;
-  padding: 12px 25px;
-  font-size: 17px;
-  font-weight: bold;
-  background: #4c8bf5;
-  color: white;
-  border: none;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: 0.25s;
-}
-
-#auth-container button:hover {
-  background: #3b73d1;
-}
-
-#auth-container p {
+  display: none; /* Disembunyikan JS */
   margin-top: 20px;
-  font-size: 14px;
-  color: #555;
+  color: var(--color-accent);
+  font-size: 1.2em;
+  font-weight: bold;
+  /* Animasi fadeIn dari script.js */
+}
+
+.win-instruction {
+  margin-top: 10px;
+  font-size: 0.8em;
+  color: var(--color-border);
+}
+
+#restart-button {
+  margin-top: 30px;
+  padding: 10px 20px;
+  font-size: 1em;
+  background-color: black;
+  color: var(--color-background);
+  border: none;
+  border-radius: 0px;
+  cursor: pointer;
+  display: none;
+  opacity: 0.2; /* Disembunyikan JS */
+  /* Animasi fadeIn dari script.js */
 }

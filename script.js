@@ -1,10 +1,9 @@
 let userName = "";
-// Kita kembalikan attempts untuk melacak klik salah
-let attempts = { q1: 0, q2: 0, q3: 0 };
 let validatedQ1 = false; // false, 'pending', or true
 let validatedQ2 = false; // false, 'pending', or true
 let validatedQ3 = false; // false or true
 let clickedFinalScreen = false;
+let attempts = { q1: 0, q2: 0, q3: 0 };
 
 const questions = [
   {
@@ -34,7 +33,7 @@ const questions = [
   {
     id: "q3",
     title: "Pertanyaan 3 (Lucu): Hewan apa yang paling sering cari bapaknya?",
-    hideOptions: true, // Q3: Opsi disembunyikan awalnya
+    hideOptions: true,
     options: [
       {
         value: "Kambing (karena bunyinya Beee... beee... cari bapak/babeh)",
@@ -48,11 +47,19 @@ const questions = [
   },
 ];
 
-// FUNGSI BACKSOUND
-let backsound = document.getElementById ('happy');
-backsound.play();
+// FUNGSI BANTUAN: Memainkan efek suara pendek
+function playSound(soundId) {
+  const sound = document.getElementById(soundId);
+  if (sound) {
+    sound.pause();
+    sound.currentTime = 0;
+    sound
+      .play()
+      .catch((e) => console.log(`Error playing sound ${soundId}:`, e));
+  }
+}
 
-// FUNGSI BANTUAN BARU: Mengubah tema background di container
+// FUNGSI BANTUAN: Mengubah tema background di container
 function changeTheme(themeClass, targetContainerId) {
   const targetContainer = document.getElementById(targetContainerId);
   if (targetContainer) {
@@ -63,11 +70,25 @@ function changeTheme(themeClass, targetContainerId) {
   }
 }
 
-// --- Audio ---
-function playAudio() {
-  let backsound = document.getElementById('backsound')
-  backsound.play()
-  login()
+// FUNGSI BARU: Efek Mengetik
+function typeWriterEffect(element, text, speed, callback) {
+  let i = 0;
+  element.textContent = "";
+  const typingSound = document.getElementById("sound-typing");
+  if (typingSound) typingSound.loop = true;
+  playSound("sound-typing");
+
+  function type() {
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
+      i++;
+      setTimeout(type, speed);
+    } else {
+      if (typingSound) typingSound.pause();
+      if (callback) callback();
+    }
+  }
+  type();
 }
 
 // --- FUNGSI LOGIN ---
@@ -77,21 +98,22 @@ function login() {
     alert("Mohon masukkan nama pengguna.");
     return;
   }
+  // Mainkan backsound utama saat login (interaksi pengguna pertama)
+  const backsound = document.getElementById("backsound");
+  if (backsound) {
+    backsound.play().catch((error) => console.log("Autoplay diblokir:", error));
+  }
+
   document.getElementById("auth-container").style.display = "none";
   document.getElementById("login-page").style.display = "block";
   document.getElementById("welcome-message").innerText = `Halo, ${userName}!`;
   initializeQuestions();
   changeTheme("theme-q1", "login-page");
-
-  let backsound = document.getElementById('backsound')
-  backsound.play()
-  login()
 }
-
 
 // --- FUNGSI UTAMA GAME ---
 function initializeQuestions() {
-  renderQuestionOptions("q1");
+  checkGameStatus("start");
   renderQuestionOptions("q2");
   document
     .querySelector("#q2-options")
@@ -116,13 +138,11 @@ function renderQuestionOptions(questionId) {
 
   shuffledOptions.forEach((optionData, index) => {
     const button = document.createElement("button");
-
     if (questionData.hideOptions) {
       button.textContent = labels[index];
     } else {
       button.textContent = `${labels[index]}. ${optionData.value}`;
     }
-
     button.setAttribute("data-correct", optionData.isCorrect);
     button.setAttribute("data-value", optionData.value);
     button.onclick = () => handleAnswer(questionId, button);
@@ -131,18 +151,21 @@ function renderQuestionOptions(questionId) {
 }
 
 function handleAnswer(questionId, clickedButton) {
+  // Mainkan sound klik setiap kali tombol jawaban diklik
+  playSound("sound-click");
+
   const status =
     questionId === "q1"
       ? validatedQ1
       : questionId === "q2"
       ? validatedQ2
       : validatedQ3;
-
   if (status === true) return;
 
   const isCorrect = clickedButton.getAttribute("data-correct") === "true";
 
   if (isCorrect) {
+    playSound("sound-correct");
     if (questionId === "q1" || questionId === "q2") {
       if (status === false) {
         alert("eits, yakin? coba lagi");
@@ -165,36 +188,44 @@ function handleAnswer(questionId, clickedButton) {
       checkGameStatus(questionId);
     }
   } else {
-    // Logika untuk menampilkan pesan "eits yakin? coba lagi"
+    playSound("sound-wrong");
     attempts[questionId]++;
-
-    if (questionId === "q1" || questionId === "q2") {
-      if (attempts[questionId] < 3) {
-        alert(`jangan betjanda deh, ayo serius`);
-      } else {
-        // Setelah 2 kali salah (klik ke-3 dan seterusnya)
-        alert(`jangan betjanda deh, ayo serius`);
-      }
-    } else {
-      // Untuk Q3, pesan standar
-      alert(`jangan betjanda deh, ayo serius`);
-    }
-
+    alert(`jangan betjanda deh, ayo serius`);
     renderQuestionOptions(questionId);
   }
 }
 
 function checkGameStatus(currentQuestionId) {
-  if (currentQuestionId === "q1" && validatedQ1 === true) {
+  if (currentQuestionId === "start") {
+    const q1TitleEl = document
+      .querySelector("#q1-options")
+      .closest(".question-card")
+      .querySelector("h2");
+    typeWriterEffect(
+      q1TitleEl,
+      questions.find((q) => q.id === "q1").title,
+      50,
+      () => renderQuestionOptions("q1")
+    );
+  } else if (currentQuestionId === "q1" && validatedQ1 === true) {
     document
       .querySelectorAll("#q1-options button")
       .forEach((btn) => (btn.disabled = true));
     document
       .querySelector("#q1-options")
       .closest(".question-card").style.display = "none";
-    document
+
+    const q2Card = document
       .querySelector("#q2-options")
-      .closest(".question-card").style.display = "block";
+      .closest(".question-card");
+    q2Card.style.display = "block";
+    const q2TitleEl = q2Card.querySelector("h2");
+    typeWriterEffect(
+      q2TitleEl,
+      questions.find((q) => q.id === "q2").title,
+      50,
+      () => renderQuestionOptions("q2")
+    );
     changeTheme("theme-q2", "login-page");
   } else if (currentQuestionId === "q2" && validatedQ2 === true) {
     document
@@ -206,7 +237,7 @@ function checkGameStatus(currentQuestionId) {
     validatedQ2 === true &&
     validatedQ3 === true
   ) {
-    setTimeout(triggerWin, 3000);
+    setTimeout(triggerWin, 3000); // Jeda 3 detik
   }
 }
 
@@ -218,12 +249,15 @@ function showQuestion3() {
         <h1 id="welcome-message">Halo, ${userName}!</h1>
         <p>Pilih jawaban yang benar. Untuk pertanyaan ini, isinya disembunyikan!</p>
         <div class="question-card">
-            <h2>${q3Data.title}</h2>
+            <h2 id="q3-title-element"></h2>
             <div class="options" id="q3-options"></div>
         </div>
     `;
 
-  renderQuestionOptions("q3");
+  const q3TitleEl = document.getElementById("q3-title-element");
+  typeWriterEffect(q3TitleEl, q3Data.title, 50, () =>
+    renderQuestionOptions("q3")
+  );
   changeTheme("theme-q3", "login-page");
 }
 
@@ -234,20 +268,25 @@ function displayQ3Answers() {
   Array.from(optionsContainer.children).forEach((button) => {
     const value = button.getAttribute("data-value");
     button.textContent = `${button.textContent}. ${value}`;
-
     if (button.getAttribute("data-correct") === "true") {
       button.style.backgroundColor = "lightgreen";
     }
   });
 }
+// FUNGSI BARU: Memulai ulang permainan
+function restartGame() {
+  // Cara termudah untuk me-reset game adalah me-reload halaman
+  window.location.reload();
+}
 
-// --- FUNGSI KEMENANGAN ---
 function triggerWin() {
-  const winScreen = document.getElementById("win-screen");
+  const backsound = document.getElementById("backsound");
+  if (backsound) backsound.pause();
+  playSound("sound-win"); // Mainkan suara kemenangan/tepuk tangan
 
+  const winScreen = document.getElementById("win-screen");
   document.getElementById("login-page").style.display = "none";
   winScreen.style.display = "flex";
-
   changeTheme(null, "login-page");
 
   const winText = document.getElementById("win-text");
@@ -262,7 +301,7 @@ function triggerWin() {
   instructionP.textContent =
     "Klik di mana saja pada layar ini untuk melihat 'gambar'nya.";
   winScreen.appendChild(instructionP);
-
+  const restartButton = document.getElementById("restart-button");
   winScreen.addEventListener("click", function () {
     if (clickedFinalScreen) return;
     clickedFinalScreen = true;
@@ -270,5 +309,7 @@ function triggerWin() {
     finalMessage.style.display = "block";
     instructionP.textContent = "Terima kasih sudah bermain!";
     winScreen.style.cursor = "default";
+    playSound(null); // Hentikan sound win setelah diklik
+    restartButton.style.display = "block";
   });
 }
