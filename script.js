@@ -1,7 +1,7 @@
 let userName = "";
-let validatedQ1 = false; // false, 'pending', or true
-let validatedQ2 = false; // false, 'pending', or true
-let validatedQ3 = false; // false or true
+let validatedQ1 = false; 
+let validatedQ2 = false; 
+let validatedQ3 = false; 
 let clickedFinalScreen = false;
 let attempts = { q1: 0, q2: 0, q3: 0 };
 
@@ -47,7 +47,7 @@ const questions = [
   },
 ];
 
-// FUNGSI BANTUAN: Memainkan efek suara pendek
+
 function playSound(soundId) {
   const sound = document.getElementById(soundId);
   if (sound) {
@@ -58,8 +58,6 @@ function playSound(soundId) {
       .catch((e) => console.log(`Error playing sound ${soundId}:`, e));
   }
 }
-
-// FUNGSI BANTUAN: Mengubah tema background di container
 function changeTheme(themeClass, targetContainerId) {
   const targetContainer = document.getElementById(targetContainerId);
   if (targetContainer) {
@@ -70,7 +68,6 @@ function changeTheme(themeClass, targetContainerId) {
   }
 }
 
-// FUNGSI BARU: Efek Mengetik
 function typeWriterEffect(element, text, speed, callback) {
   let i = 0;
   element.textContent = "";
@@ -91,14 +88,13 @@ function typeWriterEffect(element, text, speed, callback) {
   type();
 }
 
-// --- FUNGSI LOGIN ---
 function login() {
   userName = document.getElementById("username").value;
   if (userName.trim() === "") {
     alert("Mohon masukkan nama pengguna.");
     return;
   }
-  // Mainkan backsound utama saat login (interaksi pengguna pertama)
+  
   const backsound = document.getElementById("backsound");
   if (backsound) {
     backsound.play().catch((error) => console.log("Autoplay diblokir:", error));
@@ -111,7 +107,6 @@ function login() {
   changeTheme("theme-q1", "login-page");
 }
 
-// --- FUNGSI UTAMA GAME ---
 function initializeQuestions() {
   checkGameStatus("start");
   renderQuestionOptions("q2");
@@ -151,7 +146,6 @@ function renderQuestionOptions(questionId) {
 }
 
 function handleAnswer(questionId, clickedButton) {
-  // Mainkan sound klik setiap kali tombol jawaban diklik
   playSound("sound-click");
 
   const status =
@@ -237,7 +231,7 @@ function checkGameStatus(currentQuestionId) {
     validatedQ2 === true &&
     validatedQ3 === true
   ) {
-    setTimeout(triggerWin, 3000); // Jeda 3 detik
+    setTimeout(triggerWin, 3000); 
   }
 }
 
@@ -273,16 +267,16 @@ function displayQ3Answers() {
     }
   });
 }
-// FUNGSI BARU: Memulai ulang permainan
+
 function restartGame() {
-  // Cara termudah untuk me-reset game adalah me-reload halaman
+ 
   window.location.reload();
 }
 
 function triggerWin() {
   const backsound = document.getElementById("backsound");
   if (backsound) backsound.pause();
-  playSound("sound-win"); // Mainkan suara kemenangan/tepuk tangan
+  playSound("sound-win"); 
 
   const winScreen = document.getElementById("win-screen");
   document.getElementById("login-page").style.display = "none";
@@ -309,7 +303,7 @@ function triggerWin() {
     finalMessage.style.display = "block";
     instructionP.textContent = "Terima kasih sudah bermain!";
     winScreen.style.cursor = "default";
-    playSound(null); // Hentikan sound win setelah diklik
+    playSound(null); 
     restartButton.style.display = "block";
   });
 }
